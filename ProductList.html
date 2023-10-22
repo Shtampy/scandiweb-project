@@ -123,5 +123,116 @@
     <hr />
 
     <p>Scandiweb Test assigment</p>
+     <script>
+        // Map product types to their specific attributes
+        const productAttributes = {
+          DVD: "size-attribute",
+          Book: "weight-attribute",
+          Furniture: "furniture-attribute",
+        };
+
+        // Function to toggle a single product-specific attribute
+        function toggleAttribute(selectedAttribute) {
+          const attributeDiv = document.getElementById("product_specific_attributes");
+
+          // Hide all attribute containers
+          const attributeContainers = attributeDiv.querySelectorAll(".attribute-container");
+          attributeContainers.forEach((container) => {
+            container.style.display = "none";
+          });
+
+          // Show the selected attribute container
+          const container = document.getElementById(selectedAttribute);
+          if (container) {
+            container.style.display = "block";
+          }
+        }
+
+        // Show attribute descriptions
+        function showAttributeDescription(selectedType) {
+          const descriptions = {
+            DVD: "Please, provide size",
+            Book: "Please, provide weight",
+            Furniture: "Please, provide dimensions",
+          };
+          const descriptionElement = document.getElementById(`${selectedType}-description`);
+          if (descriptionElement) {
+            descriptionElement.textContent = descriptions[selectedType];
+            descriptionElement.style.display = "block";
+          }
+        }
+
+        // Hide attribute descriptions
+        function hideAttributeDescription(selectedType) {
+          const descriptionElement = document.getElementById(`${selectedType}-description`);
+          if (descriptionElement) {
+            descriptionElement.style.display = "none";
+          }
+        }
+
+        // Add event listener to the type switcher dropdown
+        const typeSwitcher = document.getElementById("productType");
+        typeSwitcher.addEventListener("change", function () {
+          const selectedType = typeSwitcher.value;
+          toggleAttribute(productAttributes[selectedType]);
+          showAttributeDescription(selectedType);
+        });
+
+        // Initialize attributes based on the initial product type
+        toggleAttribute(productAttributes[typeSwitcher.value]);
+        showAttributeDescription(typeSwitcher.value);
+
+        // Notification element
+        const notificationElement = document.getElementById("notification");
+
+        // Function to show a notification
+        function showNotification(message) {
+          notificationElement.textContent = message;
+          notificationElement.style.display = "block";
+        }
+
+        // Function to hide the notification
+        function hideNotification() {
+          notificationElement.style.display = "none";
+        }
+
+        // Form submission event
+        const submitButton = document.getElementById("submit-btn");
+        submitButton.addEventListener("click", function (e) {
+          e.preventDefault(); // Prevent the form from submitting
+
+          // Validate form fields
+          const sku = document.getElementById("sku").value;
+          const name = document.getElementById("name").value;
+          const price = document.getElementById("price").value;
+          const selectedType = typeSwitcher.value;
+          const selectedAttributeContainer = productAttributes[selectedType];
+
+          // Check if any field is empty
+          if (!sku || !name || !price) {
+            showNotification("Please, submit required data");
+            return;
+          }
+
+          // Check for the attribute field based on the product type
+          const attributeValue = document.getElementById(selectedAttributeContainer).querySelector("input").value;
+
+          // Check if attribute value is empty
+          if (!attributeValue) {
+            showNotification("Please, provide the data of indicated type");
+            return;
+          }
+
+          // Check for SKU uniqueness (You may need to implement server-side validation for this)
+          const products = JSON.parse(localStorage.getItem("products")) || [];
+          if (products.some((product) => product.sku === sku)) {
+            showNotification("SKU must be unique");
+            return;
+          }
+
+          // If all checks pass, save the product
+          const newProduct = {
+            sku,}
+      </script>
   </body>
 </html>
