@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./styles.css" rel="stylesheet" type="text/css" />
+    <title>Product List</title>
+  </head>
+  <body>
+    <div class="container">
+      <p class="title">Product List</p>
+    </div>
+
+    <button id="add-btn" onclick="window.location.href='AddProduct.html';">
+      ADD
+    </button>
+
+    <button class="delete-product-btn" id="massDeleteButton">
+      MASS DELETE
+    </button>
+    <br />
+    <br />
+    <hr />
+    <ul>
+      <div class="style">
+        <div class="style2">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>JVC200123</p>
+          <p>Acme DISC</p>
+          <p>1.00 $</p>
+          <p>Size: 700 MB</p>
+        </div>
+
+        <div class="style3">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>JVC200123</p>
+          <p>Acme DISC</p>
+          <p>1.00 $</p>
+          <p>Size: 700 MB</p>
+        </div>
+
+        <div class="style2">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>JVC200123</p>
+          <p>Acme DISC</p>
+          <p>1.00 $</p>
+          <p>Size: 700 MB</p>
+        </div>
+
+        <div class="style3">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>JVC200123</p>
+          <p>Acme DISC</p>
+          <p>1.00 $</p>
+          <p>Size: 700 MB</p>
+        </div>
+      </div>
+
+      <div class="style">
+        <div class="style3">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>GGWP007</p>
+          <p>War and Peace</p>
+          <p>20.00 $</p>
+          <p>Weight: 2kg</p>
+        </div>
+
+        <div class="style2">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>GGWP007</p>
+          <p>War and Peace</p>
+          <p>20.00 $</p>
+          <p>Weight: 2kg</p>
+        </div>
+
+        <div class="style3">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>GGWP007</p>
+          <p>War and Peace</p>
+          <p>20.00 $</p>
+          <p>Weight: 2kg</p>
+        </div>
+
+        <div class="style2">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>GGWP007</p>
+          <p>War and Peace</p>
+          <p>20.00 $</p>
+          <p>Weight: 2kg</p>
+        </div>
+      </div>
+
+      <div class="style">
+        <div class="style3">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>TR120555</p>
+          <p>Chair</p>
+          <p>40.00 $</p>
+          <p>Dimension: 24x45x15</p>
+        </div>
+
+        <div class="style2">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>TR120555</p>
+          <p>Chair</p>
+          <p>40.00 $</p>
+          <p>Dimension: 24x45x15</p>
+        </div>
+
+        <div class="style3">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>TR120555</p>
+          <p>Chair</p>
+          <p>40.00 $</p>
+          <p>Dimension: 24x45x15</p>
+        </div>
+
+        <div class="style2">
+          <input type="checkbox" class="delete-checkbox" />
+          <p>TR120555</p>
+          <p>Chair</p>
+          <p>40.00 $</p>
+          <p>Dimension: 24x45x15</p>
+        </div>
+      </div>
+    </ul>
+    <hr />
+
+    <p>Scandiweb Test assigment</p>
+
+    <script>
+      // Get a reference to the "MASS DELETE" button
+      const massDeleteButton = document.getElementById("massDeleteButton");
+
+      // Add a click event listener to the button
+      massDeleteButton.addEventListener("click", function () {
+        // Get all checkboxes with the class "delete-checkbox"
+        const checkboxes = document.querySelectorAll(".delete-checkbox");
+
+        // Loop through all checkboxes and uncheck them
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = false;
+        });
+      });
+    </script>
+  </body>
+</html>
