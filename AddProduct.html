@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./styles.css" rel="stylesheet" type="text/css" />
+
+    <title>Add Product</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="add_product.js"></script>
+
+    <body>
+      <div class="container">
+        <p class="title">Product Add</p>
+      </div>
+
+      <button id="save-btn">SAVE</button>
+      <button id="cancel-btn">CANCEL</button>
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <hr />
+
+      <form id="product-form">
+        <ul>
+        <p class="mim">SKU</p>
+        <input class="box" type="text" placeholder="#sku" required /><br />
+
+        <p class="mim">Name</p>
+        <input class="box" type="text" placeholder="#name" required /><br />
+
+        <p class="mim">Price ($):</p>
+        <input
+          class="box"
+          type="number"
+          placeholder="#price"
+          step="0.01"
+          required
+        /><br />
+
+        <p class="mim">Type Switcher:</p>
+        <select id="productType" name="productType" required>
+          <option value="DVD">DVD</option>
+          <option value="Book">Book</option>
+          <option value="Furniture">Furniture</option>
+        </select>
+
+        <div id="product_specific_attributes">
+          <!-- Size (in MB) for DVD-disc -->
+          <label for="size">Size (MB):</label>
+          <input type="number" id="size" name="size" /><br />
+
+          <!-- Weight (in Kg) for Book -->
+          <label for="weight">Weight (Kg):</label>
+          <input type="number" id="weight" name="weight" /><br />
+
+          <!-- Dimensions (HxWxL) for Furniture -->
+          <label for="height">Height (in cm):</label>
+          <input type="number" id="height" name="height" /><br />
+
+          <label for="width">Width (in cm):</label>
+          <input type="number" id="width" name="width" /><br />
+
+          <label for="length">Length (in cm):</label>
+          <input type="number" id="length" name="length" /><br />
+        </ul>
+        </div>
+        <br />
+        <button id="submit-btn">SUBMIT</button>
+        <!-- Add input fields and other elements here -->
+      </form>
+      <br />
+      <br />
+      <br />
+      <hr />
+
+      <p>Scandiweb Test assigment</p>
+
+      <script>
+        // Map product types to their specific attributes
+        const productAttributes = {
+          DVD: "size-attribute",
+          Book: "weight-attribute",
+          Furniture: "furniture-attribute",
+        };
+
+        // Function to toggle a single product-specific attribute
+        function toggleAttribute(selectedAttribute) {
+          const attributeDiv = document.getElementById("product_specific_attributes");
+
+          // Hide all attribute containers
+          const attributeContainers = attributeDiv.querySelectorAll(".attribute-container");
+          attributeContainers.forEach((container) => {
+            container.style.display = "none";
+          });
+
+          // Show the selected attribute container
+          const container = document.getElementById(selectedAttribute);
+          if (container) {
+            container.style.display = "block";
+          }
+        }
+
+        // Show attribute descriptions
+        function showAttributeDescription(selectedType) {
+          const descriptions = {
+            DVD: "Please, provide size",
+            Book: "Please, provide weight",
+            Furniture: "Please, provide dimensions",
+          };
+          const descriptionElement = document.getElementById(`${selectedType}-description`);
+          if (descriptionElement) {
+            descriptionElement.textContent = descriptions[selectedType];
+            descriptionElement.style.display = "block";
+          }
+        }
+
+        // Hide attribute descriptions
+        function hideAttributeDescription(selectedType) {
+          const descriptionElement = document.getElementById(`${selectedType}-description`);
+          if (descriptionElement) {
+            descriptionElement.style.display = "none";
+          }
+        }
+
+        // Add event listener to the type switcher dropdown
+        const typeSwitcher = document.getElementById("productType");
+        typeSwitcher.addEventListener("change", function () {
+          const selectedType = typeSwitcher.value;
+          toggleAttribute(productAttributes[selectedType]);
+          showAttributeDescription(selectedType);
+        });
+
+        // Initialize attributes based on the initial product type
+        toggleAttribute(productAttributes[typeSwitcher.value]);
+        showAttributeDescription(typeSwitcher.value);
+
+        // Notification element
+        const notificationElement = document.getElementById("notification");
+
+        // Function to show a notification
+        function showNotification(message) {
+          notificationElement.textContent = message;
+          notificationElement.style.display = "block";
+        }
+
+        // Function to hide the notification
+        function hideNotification() {
+          notificationElement.style.display = "none";
+        }
+
+        // Form submission event
+        const submitButton = document.getElementById("submit-btn");
+        submitButton.addEventListener("click", function (e) {
+          e.preventDefault(); // Prevent the form from submitting
+
+          // Validate form fields
+          const sku = document.getElementById("sku").value;
+          const name = document.getElementById("name").value;
+          const price = document.getElementById("price").value;
+          const selectedType = typeSwitcher.value;
+          const selectedAttributeContainer = productAttributes[selectedType];
+
+          // Check if any field is empty
+          if (!sku || !name || !price) {
+            showNotification("Please, submit required data");
+            return;
+          }
+
+          // Check for the attribute field based on the product type
+          const attributeValue = document.getElementById(selectedAttributeContainer).querySelector("input").value;
+
+          // Check if attribute value is empty
+          if (!attributeValue) {
+            showNotification("Please, provide the data of indicated type");
+            return;
+          }
+
+          // Check for SKU uniqueness (You may need to implement server-side validation for this)
+          const products = JSON.parse(localStorage.getItem("products")) || [];
+          if (products.some((product) => product.sku === sku)) {
+            showNotification("SKU must be unique");
+            return;
+          }
+
+          // If all checks pass, save the product
+          const newProduct = {
+            sku,
+      </script>
+    </body>
+  </head>
+</html>
+          }
