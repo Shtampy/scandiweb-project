@@ -1,196 +1,178 @@
+<!-- add_product.php -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./styles.css" rel="stylesheet" type="text/css" />
-
     <title>Add Product</title>
+    <!-- Include any necessary CSS or Bootstrap here -->
+    <link href="./styles.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="add_product.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <p class="title">Product List</p>
 
-    <body>
-      <div class="container">
-        <p class="title">Product Add</p>
-      </div>
+      <li><a href="ProductAdd.html">Product add</a></li>
+    </div>
 
-      <button id="save-btn">SAVE</button>
-      <button id="cancel-btn">CANCEL</button>
+    <button id="add-btn">ADD</button>
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <hr />
+    <button id="delete-checkbox">MASS DELETE</button>
+    <br />
+    <br />
+    <hr />
 
-      <form id="product-form">
-        <ul>
-        <p class="mim">SKU</p>
-        <input class="box" type="text" placeholder="#sku" required /><br />
+    <!-- SKU -->
+    <label for="sku">SKU:</label>
+    <input
+      type="text"
+      id="sku"
+      name="sku"
+      placeholder="SKU"
+      required
+    /><br /><br />
 
-        <p class="mim">Name</p>
-        <input class="box" type="text" placeholder="#name" required /><br />
+    <!-- Name -->
+    <label for="name">Name:</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      placeholder="name"
+      required
+    /><br /><br />
 
-        <p class="mim">Price ($):</p>
-        <input
-          class="box"
-          type="number"
-          placeholder="#price"
-          step="0.01"
-          required
-        /><br />
+    <!-- Price -->
+    <label for="price">Price ($):</label>
+    <input
+      type="number"
+      id="price"
+      name="price"
+      placeholder="price"
+      required
+    /><br /><br />
 
-        <p class="mim">Type Switcher:</p>
-        <select id="productType" name="productType" required>
-          <option value="DVD">DVD</option>
-          <option value="Book">Book</option>
-          <option value="Furniture">Furniture</option>
-        </select>
+    <!-- Size (DVD) -->
+    <div id="size" class="product-specific" style="display: none">
+      <label for="size">Size (MB):</label>
+      <input type="text" id="sizeValue" name="sizeValue" />
+    </div>
 
-        <div id="product_specific_attributes">
-          <!-- Size (in MB) for DVD-disc -->
-          <label for="size">Size (MB):</label>
-          <input type="number" id="size" name="size" /><br />
+    <!-- Weight (Book) -->
+    <div id="weight" class="product-specific" style="display: none">
+      <label for="weight">Weight (Kg):</label>
+      <input type="text" id="weightValue" name="weightValue" />
+    </div>
 
-          <!-- Weight (in Kg) for Book -->
-          <label for="weight">Weight (Kg):</label>
-          <input type="number" id="weight" name="weight" /><br />
+    <!-- Product Type Switcher -->
+    <label for="productType">Product Type:</label>
+    <select id="productType" name="productType">
+      <option value="DVD">DVD</option>
+      <option value="Book">Book</option>
+      <option value="Furniture">Furniture</option></select
+    ><br /><br />
 
-          <!-- Dimensions (HxWxL) for Furniture -->
-          <label for="height">Height (in cm):</label>
-          <input type="number" id="height" name="height" /><br />
+    <!-- Dimensions (Furniture) -->
+    <div class="dimensions product-specific" style="display: none">
+      <label for="height">Height:</label>
+      <input type="text" id="height" name="height" /><br /><br />
 
-          <label for="width">Width (in cm):</label>
-          <input type="number" id="width" name="width" /><br />
+      <label for="width">Width:</label>
+      <input type="text" id="width" name="width" /><br /><br />
 
-          <label for="length">Length (in cm):</label>
-          <input type="number" id="length" name="length" /><br />
-        </ul>
-        </div>
-        <br />
-        <button id="submit-btn">SUBMIT</button>
-        <!-- Add input fields and other elements here -->
-      </form>
-      <br />
-      <br />
-      <br />
-      <hr />
+      <label for="length">Length:</label>
+      <input type="text" id="length" name="length" /><br /><br />
+    </div>
 
-      <p>Scandiweb Test assigment</p>
+    <!-- Notification -->
+    <div id="notification" style="display: none"></div>
 
-      <script>
-        // Map product types to their specific attributes
-        const productAttributes = {
-          DVD: "size-attribute",
-          Book: "weight-attribute",
-          Furniture: "furniture-attribute",
-        };
+    <!-- Save and Cancel Buttons -->
+    <button id="add-btn">Save</button>
+    <button class="delete-product-btn">Cancel</button>
 
-        // Function to toggle a single product-specific attribute
-        function toggleAttribute(selectedAttribute) {
-          const attributeDiv = document.getElementById("product_specific_attributes");
+    <!-- JavaScript for Dynamic Form Changes and Validation -->
+    <script>
+      $(document).ready(function () {
+        $("#productType").change(function () {
+          var selectedType = $(this).val();
+          $(".product-specific").hide();
 
-          // Hide all attribute containers
-          const attributeContainers = attributeDiv.querySelectorAll(".attribute-container");
-          attributeContainers.forEach((container) => {
-            container.style.display = "none";
-          });
-
-          // Show the selected attribute container
-          const container = document.getElementById(selectedAttribute);
-          if (container) {
-            container.style.display = "block";
+          if (selectedType === "DVD") {
+            $("#size").show();
+          } else if (selectedType === "Book") {
+            $("#weight").show();
+          } else if (selectedType === "Furniture") {
+            $(".dimensions").show();
           }
-        }
-
-        // Show attribute descriptions
-        function showAttributeDescription(selectedType) {
-          const descriptions = {
-            DVD: "Please, provide size",
-            Book: "Please, provide weight",
-            Furniture: "Please, provide dimensions",
-          };
-          const descriptionElement = document.getElementById(`${selectedType}-description`);
-          if (descriptionElement) {
-            descriptionElement.textContent = descriptions[selectedType];
-            descriptionElement.style.display = "block";
-          }
-        }
-
-        // Hide attribute descriptions
-        function hideAttributeDescription(selectedType) {
-          const descriptionElement = document.getElementById(`${selectedType}-description`);
-          if (descriptionElement) {
-            descriptionElement.style.display = "none";
-          }
-        }
-
-        // Add event listener to the type switcher dropdown
-        const typeSwitcher = document.getElementById("productType");
-        typeSwitcher.addEventListener("change", function () {
-          const selectedType = typeSwitcher.value;
-          toggleAttribute(productAttributes[selectedType]);
-          showAttributeDescription(selectedType);
         });
 
-        // Initialize attributes based on the initial product type
-        toggleAttribute(productAttributes[typeSwitcher.value]);
-        showAttributeDescription(typeSwitcher.value);
+        $("#saveButton").click(function () {
+          var selectedType = $("#productType").val();
+          var sku = $("#sku").val();
+          var name = $("#name").val();
+          var price = $("#price").val();
+          var sizeValue = $("#sizeValue").val();
+          var weightValue = $("#weightValue").val();
+          var height = $("#height").val();
+          var width = $("#width").val();
+          var length = $("#length").val();
 
-        // Notification element
-        const notificationElement = document.getElementById("notification");
-
-        // Function to show a notification
-        function showNotification(message) {
-          notificationElement.textContent = message;
-          notificationElement.style.display = "block";
-        }
-
-        // Function to hide the notification
-        function hideNotification() {
-          notificationElement.style.display = "none";
-        }
-
-        // Form submission event
-        const submitButton = document.getElementById("submit-btn");
-        submitButton.addEventListener("click", function (e) {
-          e.preventDefault(); // Prevent the form from submitting
-
-          // Validate form fields
-          const sku = document.getElementById("sku").value;
-          const name = document.getElementById("name").value;
-          const price = document.getElementById("price").value;
-          const selectedType = typeSwitcher.value;
-          const selectedAttributeContainer = productAttributes[selectedType];
-
-          // Check if any field is empty
+          // Validate input data
           if (!sku || !name || !price) {
-            showNotification("Please, submit required data");
-            return;
+            $("#notification").html("Please, submit required data");
+            $("#notification").show();
+          } else {
+            // Validate based on product type
+            if (selectedType === "DVD" && !sizeValue) {
+              $("#notification").html(
+                "Please, provide the data of indicated type"
+              );
+              $("#notification").show();
+            } else if (selectedType === "Book" && !weightValue) {
+              $("#notification").html(
+                "Please, provide the data of indicated type"
+              );
+              $("#notification").show();
+            } else if (
+              selectedType === "Furniture" &&
+              (!height || !width || !length)
+            ) {
+              $("#notification").html(
+                "Please, provide the data of indicated type"
+              );
+              $("#notification").show();
+            } else {
+              // AJAX request to check SKU uniqueness (PHP script required)
+              $.ajax({
+                type: "POST",
+                url: "check_sku.php",
+                data: { sku: sku },
+                success: function (response) {
+                  if (response === "unique") {
+                    // Submit the form (PHP script required)
+                    $("#product_form").submit();
+                  } else {
+                    $("#notification").html("SKU must be unique");
+                    $("#notification").show();
+                  }
+                },
+              });
+            }
           }
+        });
 
-          // Check for the attribute field based on the product type
-          const attributeValue = document.getElementById(selectedAttributeContainer).querySelector("input").value;
+        $("#cancelButton").click(function () {
+          window.location.href = "/product-list";
+        });
+      });
+    </script>
 
-          // Check if attribute value is empty
-          if (!attributeValue) {
-            showNotification("Please, provide the data of indicated type");
-            return;
-          }
-
-          // Check for SKU uniqueness (You may need to implement server-side validation for this)
-          const products = JSON.parse(localStorage.getItem("products")) || [];
-          if (products.some((product) => product.sku === sku)) {
-            showNotification("SKU must be unique");
-            return;
-          }
-
-          // If all checks pass, save the product
-          const newProduct = {
-            sku,
-      </script>
-    </body>
-  </head>
+    <hr />
+    <br />
+    <br />
+    <p>Scandiweb Test assigment</p>
+  </body>
 </html>
-          }
